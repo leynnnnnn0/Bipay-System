@@ -1,7 +1,7 @@
 <script setup>
 import SidebarLink from "@/Components/SidebarLink.vue";
 import {usePage} from "@inertiajs/vue3";
-console.log(usePage().url);
+
 </script>
 
 <template>
