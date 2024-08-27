@@ -8,17 +8,52 @@ import {useForm} from "@inertiajs/vue3";
 import ConfirmDetails from "@/Pages/Employee/Partials/ConfirmDetails.vue";
 
 const stepCount = ref(1);
-const personalDetailsForm = useForm({});
-const addressDetailsForm = useForm({});
+const personalInformationForm = useForm({
+    firstName: '',
+    lastName: '',
+    middleName: '',
+    gender: '',
+    dateOfBirth: '',
+    phoneNumber: '',
+    email: ''
+});
+const addressInformationForm = useForm({
+    municipality: '',
+    barangay: '',
+    provinceOrState: '',
+    zipCode: '',
+    address: ''
+})
+
+const form = useForm({});
+
+const back = () => {
+    stepCount.value--;
+}
+
+const next = () => {
+    stepCount.value++;
+}
 
 const handlePersonalDetailsData = (data) => {
-    personalDetailsForm.value = data;
-    console.log('Updated form for personal details data:', personalDetailsForm.value);
+    const {firstName, lastName, middleName, gender, dateOfBirth, phoneNumber, email} = data;
+    personalInformationForm.firstName = firstName;
+    personalInformationForm.lastName = lastName;
+    personalInformationForm.middleName = middleName;
+    personalInformationForm.gender = gender;
+    personalInformationForm.dateOfBirth = dateOfBirth;
+    personalInformationForm.phoneNumber = phoneNumber;
+    personalInformationForm.email = email;
 }
 
 const handleAddressDetailsData = (data) => {
-    addressDetailsForm.value = data;
-    console.log('Updated form for address details data:', addressDetailsForm.value);
+    const {municipality, barangay, provinceOrState, zipCode, address} = data;
+    addressInformationForm.municipality = municipality;
+    addressInformationForm.barangay = barangay;
+    addressInformationForm.provinceOrState = provinceOrState;
+    addressInformationForm.zipCode = zipCode;
+    addressInformationForm.address = address;
+
 }
 
 </script>
@@ -36,13 +71,13 @@ const handleAddressDetailsData = (data) => {
                 <Progress step-count="2" step="Address Details" :active="stepCount === 2" :done="stepCount > 2"/>
                 <Progress step-count="3" step="Confirm Details" :active="stepCount === 3" :done="false"/>
             </section>
-                <PersonalInformation v-if="stepCount === 1" @form-updated="handlePersonalDetailsData"/>
-                <AddressInformation v-if="stepCount === 2" @form-updated="handleAddressDetailsData"/>
-                <ConfirmDetails v-if="stepCount === 3"/>
+                <PersonalInformation v-if="stepCount === 1" :initialFormData="personalInformationForm" @form-updated="handlePersonalDetailsData"/>
+                <AddressInformation  v-if="stepCount === 2" :initialFormData="addressInformationForm" @form-updated="handleAddressDetailsData"/>
+                <ConfirmDetails :personalInformation="personalInformationForm" :addressInformation="addressInformationForm" v-if="stepCount === 3"/>
                 <div class="w-full flex justify-center col-span-2 gap-3">
-                    <button v-if="stepCount > 1" @click="stepCount--" class="border border-blue-500 text-blue-500 px-4 py-1 font-bold rounded-lg w-24">Back</button>
-                    <button v-if="stepCount < 3" @click="stepCount++" class="bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Next</button>
-                    <button v-if="stepCount === 3" @click="stepCount++" class="bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Create</button>
+                    <button v-if="stepCount > 1" @click="back" class="hover:bg-opacity-75 transition-colors duration-500 border border-blue-500 text-blue-500 px-4 py-1 font-bold rounded-lg w-24">Back</button>
+                    <button v-if="stepCount < 3" @click="next" class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Next</button>
+                    <button v-if="stepCount === 3" @click="stepCount++" class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Create</button>
                 </div>
             </div>
         </div>
