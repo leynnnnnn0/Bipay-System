@@ -1,12 +1,17 @@
 <script setup>
 import {ref} from "vue";
 import NavDropdownButton from "@/Components/NavDropdownButton.vue";
+import { onClickOutside } from '@vueuse/core'
 
+const target = ref(null)
 const showTagOptions = ref(false);
+onClickOutside(target, event => showTagOptions.value = false)
+
+
 </script>
 
 <template>
-    <div class="relative">
+    <div class="relative" ref="target">
         <div class="flex items-center justify-between border border-border-color w-44 py-1 px-2 rounded-lg">
             <div class="flex flex-col text-xs">
                Not Ready
@@ -18,7 +23,7 @@ const showTagOptions = ref(false);
                 </svg>
             </button>
         </div>
-        <div v-if="showTagOptions" class="overflow-hidden flex absolute flex-col items-start rounded-lg right-0 w-44 bg-white mt-2 drop-shadow-2xl ease-in-out transition-all duration-300">
+        <div v-if="showTagOptions" class="divide-y overflow-hidden flex absolute flex-col items-start rounded-lg right-0 w-44 bg-white mt-2 drop-shadow-2xl ease-in-out transition-all duration-300">
             <NavDropdownButton>Ready</NavDropdownButton>
             <NavDropdownButton>Lunch</NavDropdownButton>
             <NavDropdownButton>Break</NavDropdownButton>
