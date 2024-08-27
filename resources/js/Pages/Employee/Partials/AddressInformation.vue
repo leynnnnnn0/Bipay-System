@@ -16,7 +16,6 @@ const {municipality, barangay, provinceOrState, zipCode, address} = props.initia
 const form = reactive({
     address: address,
     zipCode: zipCode,
-    country: municipality,
     municipality: municipality,
     barangay: barangay,
     provinceOrState: provinceOrState,

@@ -8,6 +8,7 @@ import {useForm} from "@inertiajs/vue3";
 import ConfirmDetails from "@/Pages/Employee/Partials/ConfirmDetails.vue";
 
 const stepCount = ref(1);
+const isAllowedToGoToNextStep = ref(false);
 const personalInformationForm = useForm({
     firstName: '',
     lastName: '',
@@ -25,9 +26,9 @@ const addressInformationForm = useForm({
     address: ''
 })
 
-const form = useForm({});
 
 const back = () => {
+    isAllowedToGoToNextStep.value = true;
     stepCount.value--;
 }
 
@@ -44,6 +45,9 @@ const handlePersonalDetailsData = (data) => {
     personalInformationForm.dateOfBirth = dateOfBirth;
     personalInformationForm.phoneNumber = phoneNumber;
     personalInformationForm.email = email;
+
+    const result = Object.values(data).find(item => item === '');
+    isAllowedToGoToNextStep.value = result === undefined;
 }
 
 const handleAddressDetailsData = (data) => {
@@ -53,7 +57,8 @@ const handleAddressDetailsData = (data) => {
     addressInformationForm.provinceOrState = provinceOrState;
     addressInformationForm.zipCode = zipCode;
     addressInformationForm.address = address;
-
+    const result = Object.values(data).find(item => item === '');
+    isAllowedToGoToNextStep.value = result === undefined;
 }
 
 </script>
@@ -76,8 +81,8 @@ const handleAddressDetailsData = (data) => {
                 <ConfirmDetails :personalInformation="personalInformationForm" :addressInformation="addressInformationForm" v-if="stepCount === 3"/>
                 <div class="w-full flex justify-center col-span-2 gap-3">
                     <button v-if="stepCount > 1" @click="back" class="hover:bg-opacity-75 transition-colors duration-500 border border-blue-500 text-blue-500 px-4 py-1 font-bold rounded-lg w-24">Back</button>
-                    <button v-if="stepCount < 3" @click="next" class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Next</button>
-                    <button v-if="stepCount === 3" @click="stepCount++" class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Create</button>
+                    <button :disabled="!isAllowedToGoToNextStep" :class="{'bg-opacity-75' :!isAllowedToGoToNextStep}"  v-if="stepCount < 3" @click="next" class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Next</button>
+                    <button  v-if="stepCount === 3" @click="stepCount++"  class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Create</button>
                 </div>
             </div>
         </div>
