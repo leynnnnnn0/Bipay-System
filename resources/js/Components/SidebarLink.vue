@@ -23,7 +23,7 @@ defineProps({
 
 <template>
     <div  class="flex items-center gap-3 h-16 px-5 hover:bg-gray-100 transition-colors duration-300" :class="{'bg-gray-300' : active}">
-        <Link href="#" class="w-full flex items-center gap-3 lg:justify-start justify-center">
+        <Link :href="to" class="w-full flex items-center gap-3 lg:justify-start justify-center">
             <span><slot></slot></span>
             <span class="font-bold text-lg lg:block hidden">{{ location }}</span>
         </Link>
