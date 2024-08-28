@@ -1,10 +1,10 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import PersonalInformation from "@/Pages/Employee/Partials/PersonalInformation.vue";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import Progress from "@/Components/Progress.vue";
 import AddressInformation from "@/Pages/Employee/Partials/AddressInformation.vue";
-import {useForm} from "@inertiajs/vue3";
+import {useForm } from "@inertiajs/vue3";
 import ConfirmDetails from "@/Pages/Employee/Partials/ConfirmDetails.vue";
 
 const stepCount = ref(1);
@@ -26,6 +26,21 @@ const addressInformationForm = useForm({
     address: ''
 })
 
+watch(stepCount, () => {
+    if(stepCount.value === 1)
+    {
+        const result = Object.values(personalInformationForm).find((item, index) => index !== 2 && item === '');
+        isAllowedToGoToNextStep.value = result === undefined;
+        console.log(result);
+    }
+    if(stepCount.value === 2)
+    {
+        const result = Object.values(addressInformationForm).find(item => item === '');
+        isAllowedToGoToNextStep.value = result === undefined;
+        console.log(result);
+    }
+});
+
 
 const back = () => {
     isAllowedToGoToNextStep.value = true;
@@ -35,7 +50,6 @@ const back = () => {
 const next = () => {
     stepCount.value++;
 }
-
 const handlePersonalDetailsData = (data) => {
     const {firstName, lastName, middleName, gender, dateOfBirth, phoneNumber, email} = data;
     personalInformationForm.firstName = firstName;
@@ -46,7 +60,7 @@ const handlePersonalDetailsData = (data) => {
     personalInformationForm.phoneNumber = phoneNumber;
     personalInformationForm.email = email;
 
-    const result = Object.values(data).find(item => item === '');
+    const result = Object.values(data).find((item, index) => index !== 2 &&  item === '');
     isAllowedToGoToNextStep.value = result === undefined;
 }
 

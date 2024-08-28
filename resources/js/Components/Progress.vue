@@ -21,9 +21,9 @@ defineProps({
 
 <template>
     <div class="flex items-center gap-4">
-        <div class="flex items-center justify-center border-2 border-gray-400 bg-gray-300 size-8 rounded-full" :class="{'bg-blue-600 border-none' : done, 'border-blue-600 bg-transparent': active}">
+        <div class="flex items-center justify-center border-2 border-gray-400 bg-gray-300 size-8 rounded-full" :class="{'bg-blue-800 border-none' : done, 'border-blue-800 bg-transparent': active}">
             <strong :class="{'text-white' : done}">{{ stepCount }}</strong>
         </div>
-        <strong class="text-gray-500" :class="{'text-blue-600' : active || done}">{{  step }}</strong>
+        <strong class="text-gray-500" :class="{'text-blue-800' : active || done}">{{  step }}</strong>
     </div>
 </template>
