@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Api\StoreEmployeeRequest;
 
 class EmployeeController extends Controller
 {
@@ -14,5 +14,11 @@ class EmployeeController extends Controller
     public function create()
     {
         return inertia('Employee/Create');
+    }
+
+    public function store(StoreEmployeeRequest $request)
+    {
+        $request->validated();
+        return inertia('Employee/Index', []);
     }
 }

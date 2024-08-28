@@ -4,51 +4,57 @@ import PersonalInformation from "@/Pages/Employee/Partials/PersonalInformation.v
 import {ref, watch} from "vue";
 import Progress from "@/Components/Progress.vue";
 import AddressInformation from "@/Pages/Employee/Partials/AddressInformation.vue";
-import {useForm } from "@inertiajs/vue3";
+import {useRemember} from "@inertiajs/vue3";
 import ConfirmDetails from "@/Pages/Employee/Partials/ConfirmDetails.vue";
+import { router} from "@inertiajs/vue3";
 
 const stepCount = ref(1);
 const isAllowedToGoToNextStep = ref(false);
-const personalInformationForm = useForm({
+const formErrors = ref({});
+const personalInformationForm = useRemember({
     firstName: '',
     lastName: '',
     middleName: '',
     gender: '',
     dateOfBirth: '',
     phoneNumber: '',
-    email: ''
-});
-const addressInformationForm = useForm({
+    email: '',
+    password: 'password'
+}, 'Employees/Create');
+const addressInformationForm = useRemember({
     municipality: '',
     barangay: '',
-    provinceOrState: '',
+    cityOrProvince: '',
     zipCode: '',
     address: ''
-})
+},'Address/Create')
 
 watch(stepCount, () => {
     if(stepCount.value === 1)
     {
-        const result = Object.values(personalInformationForm).find((item, index) => index !== 2 && item === '');
+        const result = Object.values(personalInformationForm.value).find((item, index) => index !== 2 && item === '');
         isAllowedToGoToNextStep.value = result === undefined;
-        console.log(result);
     }
     if(stepCount.value === 2)
     {
-        const result = Object.values(addressInformationForm).find(item => item === '');
+        const result = Object.values(addressInformationForm.value).find(item => item === '');
         isAllowedToGoToNextStep.value = result === undefined;
-        console.log(result);
+        console.log(addressInformationForm);
     }
 });
-
 
 const back = () => {
     isAllowedToGoToNextStep.value = true;
     stepCount.value--;
 }
-
 const next = () => {
     stepCount.value++;
+}
+const createEmployee = () => {
+   router.post(route('employees.store'), personalInformationForm.value, {
+        onSuccess: page => console.log(page),
+        onError: errors => formErrors.value = errors
+   });
 }
 const handlePersonalDetailsData = (data) => {
     const {firstName, lastName, middleName, gender, dateOfBirth, phoneNumber, email} = data;
@@ -65,12 +71,13 @@ const handlePersonalDetailsData = (data) => {
 }
 
 const handleAddressDetailsData = (data) => {
-    const {municipality, barangay, provinceOrState, zipCode, address} = data;
+    const {municipality, barangay, cityOrProvince, zipCode, address} = data;
     addressInformationForm.municipality = municipality;
     addressInformationForm.barangay = barangay;
-    addressInformationForm.provinceOrState = provinceOrState;
+    addressInformationForm.cityOrProvince = cityOrProvince;
     addressInformationForm.zipCode = zipCode;
     addressInformationForm.address = address;
+
     const result = Object.values(data).find(item => item === '');
     isAllowedToGoToNextStep.value = result === undefined;
 }
@@ -90,13 +97,13 @@ const handleAddressDetailsData = (data) => {
                 <Progress step-count="2" step="Address Details" :active="stepCount === 2" :done="stepCount > 2"/>
                 <Progress step-count="3" step="Confirm Details" :active="stepCount === 3" :done="false"/>
             </section>
-                <PersonalInformation v-if="stepCount === 1" :initialFormData="personalInformationForm" @form-updated="handlePersonalDetailsData"/>
-                <AddressInformation  v-if="stepCount === 2" :initialFormData="addressInformationForm" @form-updated="handleAddressDetailsData"/>
+                <PersonalInformation v-if="stepCount === 1" :formData="personalInformationForm" :formErrors="formErrors" @form-updated="handlePersonalDetailsData"/>
+                <AddressInformation  v-if="stepCount === 2" :formData="addressInformationForm" :formErrors="formErrors" @form-updated="handleAddressDetailsData"/>
                 <ConfirmDetails :personalInformation="personalInformationForm" :addressInformation="addressInformationForm" v-if="stepCount === 3"/>
                 <div class="w-full flex justify-center col-span-2 gap-3">
                     <button v-if="stepCount > 1" @click="back" class="hover:bg-opacity-75 transition-colors duration-500 border border-blue-500 text-blue-500 px-4 py-1 font-bold rounded-lg w-24">Back</button>
                     <button :disabled="!isAllowedToGoToNextStep" :class="{'bg-opacity-75' :!isAllowedToGoToNextStep}"  v-if="stepCount < 3" @click="next" class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Next</button>
-                    <button  v-if="stepCount === 3" @click="stepCount++"  class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Create</button>
+                    <button  v-if="stepCount === 3" @click="createEmployee"  class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Create</button>
                 </div>
             </div>
         </div>

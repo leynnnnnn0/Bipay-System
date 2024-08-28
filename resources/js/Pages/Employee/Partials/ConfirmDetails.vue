@@ -32,7 +32,7 @@ defineProps({
                 <section class="flex flex-col gap-1">
                     <strong class="text-gray-900">Municipality: <span v-text="addressInformation.municipality"></span></strong>
                     <strong class="text-gray-900">Barangay: <span v-text="addressInformation.barangay"></span></strong>
-                    <strong class="text-gray-900">Provice/State: <span v-text="addressInformation.provinceOrState"></span></strong>
+                    <strong class="text-gray-900">City/Province: <span v-text="addressInformation.provinceOrState"></span></strong>
                     <strong class="text-gray-900">Zipcode: <span v-text="addressInformation.zipCode"></span></strong>
                     <strong class="text-gray-900">Address: <span v-text="addressInformation.address"></span></strong>
                 </section>
