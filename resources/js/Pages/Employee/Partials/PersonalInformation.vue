@@ -33,16 +33,19 @@ watch(props.formData, (newValue) => {
         <InputDiv>
             <Label>Last Name*</Label>
             <Input v-model="formData.lastName" placeholder="Doe"/>
+            <FormError v-if="formErrors.lastName">{{ formErrors.lastName}}</FormError>
         </InputDiv>
         <InputDiv>
             <Label>Middle Name</Label>
             <Input v-model="formData.middleName" placeholder="Doe"/>
+            <FormError v-if="formErrors.middleName">{{ formErrors.middleName}}</FormError>
         </InputDiv>
         <InputDiv>
             <Label>Gender*</Label>
             <Select v-model="formData.gender">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
+                <FormError v-if="formErrors.gender">{{ formErrors.gender}}</FormError>
             </Select>
         </InputDiv>
         <InputDiv>
@@ -53,10 +56,12 @@ watch(props.formData, (newValue) => {
         <InputDiv>
             <Label>Phone Number*</Label>
             <Input v-model="formData.phoneNumber" placeholder="9*********"/>
+            <FormError v-if="formErrors.phoneNumber">{{ formErrors.phoneNumber}}</FormError>
         </InputDiv>
         <InputDiv>
             <Label>Email*</Label>
             <Input v-model="formData.email" type="email" placeholder="johndoe@gmail.com"/>
+            <FormError v-if="formErrors.email">{{ formErrors.email}}</FormError>
         </InputDiv>
     </section>
 </template>
