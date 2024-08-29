@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreAddressRequest;
+use App\Models\Address;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller

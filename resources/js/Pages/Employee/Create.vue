@@ -4,7 +4,7 @@ import PersonalInformation from "@/Pages/Employee/Partials/PersonalInformation.v
 import {ref, watch} from "vue";
 import Progress from "@/Components/Progress.vue";
 import AddressInformation from "@/Pages/Employee/Partials/AddressInformation.vue";
-import {useRemember} from "@inertiajs/vue3";
+import {router, useRemember} from "@inertiajs/vue3";
 import ConfirmDetails from "@/Pages/Employee/Partials/ConfirmDetails.vue";
 
 const stepCount = ref(1);
@@ -21,6 +21,7 @@ const personalInformationForm = useRemember({
     email: '',
     password: 'password'
 }, 'Employees/Create');
+
 const addressInformationForm = useRemember({
     municipality: '',
     barangay: '',
@@ -28,19 +29,6 @@ const addressInformationForm = useRemember({
     zipCode: '',
     streetAddress: ''
 },'Address/Create')
-
-watch(stepCount, () => {
-    if(stepCount.value === 1)
-    {
-        const result = Object.values(personalInformationForm.value).find((item, index) => index !== 2 && item === '');
-        allowedToGoToNextStep(result);
-    }
-    if(stepCount.value === 2)
-    {
-        const result = Object.values(addressInformationForm.value).find(item => item === '');
-        allowedToGoToNextStep(result);
-    }
-});
 
 const back = () => {
     isAllowedToGoToNextStep.value = true;
@@ -50,6 +38,42 @@ const next = () => {
     formErrors.value = {};
     if(stepCount.value === 1) inputValidation('/api/employees/create', personalInformationForm.value);
     if(stepCount.value === 2) inputValidation('/api/address/create', addressInformationForm.value);
+}
+const createEmployee = () => {
+    const data = {
+        ...personalInformationForm.value,
+        ...addressInformationForm.value
+    };
+    router.post(route('employees.store'),
+        data,
+        {
+            onSuccess: page => console.log(page),
+            onError: errors => console.log(errors),
+        });
+}
+
+const setFormValues = (form, values) => {
+    Object.keys(form.value).forEach(key => {
+        form.value[key] = values[key];
+    });
+}
+
+const handlePersonalDetailsData = (data) => {
+    setFormValues(personalInformationForm, data);
+
+    const result = Object.values(data).find((item, index) => index !== 2 &&  item === '');
+    allowedToGoToNextStep(result);
+}
+
+const handleAddressDetailsData = (data) => {
+    setFormValues(addressInformationForm, data);
+
+    const result = Object.values(data).find(item => item === '');
+    allowedToGoToNextStep(result);
+}
+
+const allowedToGoToNextStep = (condition) => {
+    isAllowedToGoToNextStep.value = condition === undefined;
 }
 
 const inputValidation = (routeTo, data) => {
@@ -63,33 +87,18 @@ const inputValidation = (routeTo, data) => {
         });
 }
 
-const createEmployee = () => {
-}
-const handlePersonalDetailsData = (data) => {
-    setFormValues(personalInformationForm, data);
-
-    const result = Object.values(data).find((item, index) => index !== 2 &&  item === '');
-    allowedToGoToNextStep(result);
-}
-
-const setFormValues = (form, values) => {
-    Object.keys(form.value).forEach(key => {
-        form.value[key] = values[key];
-    });
-}
-
-
-const handleAddressDetailsData = (data) => {
-    setFormValues(addressInformationForm, data);
-
-    const result = Object.values(data).find(item => item === '');
-    allowedToGoToNextStep(result);
-}
-
-const allowedToGoToNextStep = (condition) => {
-    isAllowedToGoToNextStep.value = condition === undefined;
-}
-
+watch(stepCount, () => {
+    if(stepCount.value === 1)
+    {
+        const result = Object.values(personalInformationForm.value).find((item, index) => index !== 2 && item === '');
+        allowedToGoToNextStep(result);
+    }
+    if(stepCount.value === 2)
+    {
+        const result = Object.values(addressInformationForm.value).find(item => item === '');
+        allowedToGoToNextStep(result);
+    }
+});
 </script>
 
 <template>
