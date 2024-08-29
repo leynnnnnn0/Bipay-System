@@ -10,6 +10,7 @@ import ConfirmDetails from "@/Pages/Employee/Partials/ConfirmDetails.vue";
 const stepCount = ref(1);
 const isAllowedToGoToNextStep = ref(false);
 const formErrors = ref({});
+
 const personalInformationForm = useRemember({
     firstName: '',
     lastName: '',
@@ -32,12 +33,12 @@ watch(stepCount, () => {
     if(stepCount.value === 1)
     {
         const result = Object.values(personalInformationForm.value).find((item, index) => index !== 2 && item === '');
-        isAllowedToGoToNextStep.value = result === undefined;
+        allowedToGoToNextStep(result);
     }
     if(stepCount.value === 2)
     {
         const result = Object.values(addressInformationForm.value).find(item => item === '');
-        isAllowedToGoToNextStep.value = result === undefined;
+        allowedToGoToNextStep(result);
     }
 });
 
@@ -59,36 +60,34 @@ const inputValidation = (routeTo, data) => {
         })
         .catch(error => {
             formErrors.value = error.response.data.errors
-            console.log(error)
         });
 }
 
 const createEmployee = () => {
 }
 const handlePersonalDetailsData = (data) => {
-    const {firstName, lastName, middleName, gender, dateOfBirth, phoneNumber, email} = data;
-    personalInformationForm.firstName = firstName;
-    personalInformationForm.lastName = lastName;
-    personalInformationForm.middleName = middleName;
-    personalInformationForm.gender = gender;
-    personalInformationForm.dateOfBirth = dateOfBirth;
-    personalInformationForm.phoneNumber = phoneNumber;
-    personalInformationForm.email = email;
+    setFormValues(personalInformationForm, data);
 
     const result = Object.values(data).find((item, index) => index !== 2 &&  item === '');
-    isAllowedToGoToNextStep.value = result === undefined;
+    allowedToGoToNextStep(result);
 }
 
+const setFormValues = (form, values) => {
+    Object.keys(form.value).forEach(key => {
+        form.value[key] = values[key];
+    });
+}
+
+
 const handleAddressDetailsData = (data) => {
-    const {municipality, barangay, cityOrProvince, zipCode, streetAddress} = data;
-    addressInformationForm.municipality = municipality;
-    addressInformationForm.barangay = barangay;
-    addressInformationForm.cityOrProvince = cityOrProvince;
-    addressInformationForm.zipCode = zipCode;
-    addressInformationForm.streetAddress = streetAddress;
+    setFormValues(addressInformationForm, data);
 
     const result = Object.values(data).find(item => item === '');
-    isAllowedToGoToNextStep.value = result === undefined;
+    allowedToGoToNextStep(result);
+}
+
+const allowedToGoToNextStep = (condition) => {
+    isAllowedToGoToNextStep.value = condition === undefined;
 }
 
 </script>
