@@ -15,9 +15,9 @@ const props = defineProps({
         required: true
     }
 })
-const emit = defineEmits(['formUpdated']);// Watch for changes in the form and emit the updated data
+const emit = defineEmits(['formUpdate']);// Watch for changes in the form and emit the updated data
 watch(props.formData, (newValue) => {
-    emit('formUpdated', newValue);
+    emit('formUpdate', newValue);
 }, { deep: true });
 
 </script>
@@ -27,29 +27,29 @@ watch(props.formData, (newValue) => {
         <InputDiv>
             <Label>Municipality*</Label>
             <Input v-model="formData.municipality" placeholder="General Trias"/>
-            <FormError v-if="formErrors.municipality">{{ formErrors.municipality}}</FormError>
+            <FormError v-if="formErrors.municipality">{{ formErrors.municipality[0]}}</FormError>
         </InputDiv>
         <InputDiv>
             <Label>Barangay*</Label>
             <Input v-model="formData.barangay" placeholder="Bacao"/>
-            <FormError v-if="formErrors.barangay">{{ formErrors.barangay}}</FormError>
+            <FormError v-if="formErrors.barangay">{{ formErrors.barangay[0]}}</FormError>
         </InputDiv>
         <InputDiv>
             <Label>City/Province*</Label>
             <Input v-model="formData.cityOrProvince" placeholder="Cavite"/>
-            <FormError v-if="formErrors.cityOrProvince">{{ formErrors.cityOrProvince}}</FormError>
+            <FormError v-if="formErrors.cityOrProvince">{{ formErrors.cityOrProvince[0]}}</FormError>
         </InputDiv>
         <InputDiv>
             <Label>Zipcode*</Label>
             <Input v-model="formData.zipCode" placeholder="4107"/>
-            <FormError v-if="formErrors.zipCode">{{ formErrors.zipCode}}</FormError>
+            <FormError v-if="formErrors.zipCode">{{ formErrors.zipCode[0]}}</FormError>
         </InputDiv>
         <InputDiv>
             <Label>Address*</Label>
-            <textarea v-model="formData.address" class="resize-none rounded-lg border border-black/30 px-3">
+            <textarea v-model="formData.streetAddress" class="resize-none rounded-lg border border-black/30 px-3">
 
             </textarea>
-            <FormError v-if="formErrors.address">{{ formErrors.address}}</FormError>
+            <FormError v-if="formErrors.streetAddress">{{ formErrors.address[0]}}</FormError>
         </InputDiv>
     </section>
 </template>

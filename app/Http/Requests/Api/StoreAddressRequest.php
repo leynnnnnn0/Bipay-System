@@ -25,7 +25,7 @@ class StoreAddressRequest extends FormRequest
             'municipality' => 'required',
             'barangay' => 'required',
             'streetAddress' => 'required',
-            'zipCode' => 'required',
+            'zipCode' => ['required', 'min:4', 'max:4'],
             'cityOrProvince' => 'required',
         ];
     }

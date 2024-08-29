@@ -6,7 +6,6 @@ import Progress from "@/Components/Progress.vue";
 import AddressInformation from "@/Pages/Employee/Partials/AddressInformation.vue";
 import {useRemember} from "@inertiajs/vue3";
 import ConfirmDetails from "@/Pages/Employee/Partials/ConfirmDetails.vue";
-import { router} from "@inertiajs/vue3";
 
 const stepCount = ref(1);
 const isAllowedToGoToNextStep = ref(false);
@@ -26,7 +25,7 @@ const addressInformationForm = useRemember({
     barangay: '',
     cityOrProvince: '',
     zipCode: '',
-    address: ''
+    streetAddress: ''
 },'Address/Create')
 
 watch(stepCount, () => {
@@ -39,7 +38,6 @@ watch(stepCount, () => {
     {
         const result = Object.values(addressInformationForm.value).find(item => item === '');
         isAllowedToGoToNextStep.value = result === undefined;
-        console.log(addressInformationForm);
     }
 });
 
@@ -48,13 +46,24 @@ const back = () => {
     stepCount.value--;
 }
 const next = () => {
-    stepCount.value++;
+    formErrors.value = {};
+    if(stepCount.value === 1) inputValidation('/api/employees/create', personalInformationForm.value);
+    if(stepCount.value === 2) inputValidation('/api/address/create', addressInformationForm.value);
 }
+
+const inputValidation = (routeTo, data) => {
+    axios.post(routeTo, data)
+        .then(response => {
+            if(response.data.success)
+                stepCount.value++;
+        })
+        .catch(error => {
+            formErrors.value = error.response.data.errors
+            console.log(error)
+        });
+}
+
 const createEmployee = () => {
-   router.post(route('employees.store'), personalInformationForm.value, {
-        onSuccess: page => console.log(page),
-        onError: errors => formErrors.value = errors
-   });
 }
 const handlePersonalDetailsData = (data) => {
     const {firstName, lastName, middleName, gender, dateOfBirth, phoneNumber, email} = data;
@@ -71,12 +80,12 @@ const handlePersonalDetailsData = (data) => {
 }
 
 const handleAddressDetailsData = (data) => {
-    const {municipality, barangay, cityOrProvince, zipCode, address} = data;
+    const {municipality, barangay, cityOrProvince, zipCode, streetAddress} = data;
     addressInformationForm.municipality = municipality;
     addressInformationForm.barangay = barangay;
     addressInformationForm.cityOrProvince = cityOrProvince;
     addressInformationForm.zipCode = zipCode;
-    addressInformationForm.address = address;
+    addressInformationForm.streetAddress = streetAddress;
 
     const result = Object.values(data).find(item => item === '');
     isAllowedToGoToNextStep.value = result === undefined;
@@ -93,17 +102,43 @@ const handleAddressDetailsData = (data) => {
                 <p class="text-gray-500">Enter the details to get going</p>
             </section>
             <section class="flex items-center justify-around w-full">
-                <Progress step-count="1" step="Personal Details" :active="stepCount === 1" :done="stepCount > 1"/>
-                <Progress step-count="2" step="Address Details" :active="stepCount === 2" :done="stepCount > 2"/>
-                <Progress step-count="3" step="Confirm Details" :active="stepCount === 3" :done="false"/>
+                <Progress step-count="1"
+                          step="Personal Details"
+                          :active="stepCount === 1"
+                          :done="stepCount > 1"/>
+                <Progress step-count="2"
+                          step="Address Details"
+                          :active="stepCount === 2"
+                          :done="stepCount > 2"/>
+                <Progress step-count="3"
+                          step="Confirm Details"
+                          :active="stepCount === 3"
+                          :done="false"/>
             </section>
-                <PersonalInformation v-if="stepCount === 1" :formData="personalInformationForm" :formErrors="formErrors" @form-updated="handlePersonalDetailsData"/>
-                <AddressInformation  v-if="stepCount === 2" :formData="addressInformationForm" :formErrors="formErrors" @form-updated="handleAddressDetailsData"/>
-                <ConfirmDetails :personalInformation="personalInformationForm" :addressInformation="addressInformationForm" v-if="stepCount === 3"/>
+                <PersonalInformation v-if="stepCount === 1"
+                                     :formData="personalInformationForm"
+                                     :formErrors="formErrors"
+                                     @form-update="handlePersonalDetailsData"/>
+                <AddressInformation  v-if="stepCount === 2"
+                                     :formData="addressInformationForm"
+                                     :formErrors="formErrors"
+                                     @form-update="handleAddressDetailsData"/>
+                <ConfirmDetails
+                    :personalInformation="personalInformationForm"
+                    :addressInformation="addressInformationForm"
+                    v-if="stepCount === 3"/>
                 <div class="w-full flex justify-center col-span-2 gap-3">
-                    <button v-if="stepCount > 1" @click="back" class="hover:bg-opacity-75 transition-colors duration-500 border border-blue-500 text-blue-500 px-4 py-1 font-bold rounded-lg w-24">Back</button>
-                    <button :disabled="!isAllowedToGoToNextStep" :class="{'bg-opacity-75' :!isAllowedToGoToNextStep}"  v-if="stepCount < 3" @click="next" class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Next</button>
-                    <button  v-if="stepCount === 3" @click="createEmployee"  class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Create</button>
+                    <button v-if="stepCount > 1"
+                            @click="back"
+                            class="hover:bg-opacity-75 transition-colors duration-500 border border-blue-500 text-blue-500 px-4 py-1 font-bold rounded-lg w-24">Back</button>
+                    <button v-if="stepCount < 3"
+                            @click="next"
+                            :disabled="!isAllowedToGoToNextStep"
+                            :class="{'bg-opacity-75' :!isAllowedToGoToNextStep}"
+                            class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Next</button>
+                    <button  v-if="stepCount === 3"
+                             @click="createEmployee"
+                             class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Create</button>
                 </div>
             </div>
         </div>
