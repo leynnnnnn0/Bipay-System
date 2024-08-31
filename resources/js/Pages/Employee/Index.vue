@@ -3,6 +3,8 @@
 import MainLayout from "@/Layouts/MainLayout.vue";
 import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
 import {usePage} from "@inertiajs/vue3";
+import TD from "@/Components/Table/TD.vue";
+import TH from "@/Components/Table/TH.vue";
 
 const props = usePage().props;
 const employees = props.employees.data;
@@ -24,32 +26,31 @@ const employees = props.employees.data;
             <table class="table-auto w-full bg-white rounded-lg overflow-hidden">
                 <thead class="bg-white text-gray-500 text-sm border-b border-gray-200">
                 <tr>
-                    <td class="p-3">Employee Name</td>
-                    <td class="p-3">Position</td>
-                    <td class="p-3">Team</td>
-                    <td class="p-3">Hire Date</td>
-                    <td class="p-3">Actions</td>
+                    <TH>Employee Name</TH>
+                    <TH>Position</TH>
+                    <TH>Team</TH>
+                    <TH>Hire Date</TH>
+                    <TH>Actions</TH>
                 </tr>
                 </thead>
                 <tbody class="font-bold divide-y">
                 <tr v-for="employee in employees" :key="employee.id">
-                    <td class="p-3">
+                    <TD class="p-3">
                         <div class="flex flex-col">
                             <strong v-text="employee.fullName"></strong>
                             <span class="text-gray-500 text-xs">ID: {{ employee.id }}</span>
                         </div>
-                    </td>
-                    <td class="p-3">
+                    </TD>
+                    <TD class="p-3">
                         <strong class="text-sm">Senior Developer</strong>
-                    </td>
+                    </TD>
                     <td class="p-3">
                         <strong class="text-sm">Team Allan</strong>
                     </td>
-                    <td class="p-3">
+                    <TD class="p-3">
                         <strong class="text-sm" v-text="employee.created_at"></strong>
-                        <strong class="text-sm" v-text="employee.created_at"></strong>
-                    </td>
-                    <td class="p-3">
+                    </TD>
+                    <TD class="p-3">
                         <div class="flex items-center justify-between">
                             <button class="flex gap-2 w-full text-green-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
@@ -66,7 +67,7 @@ const employees = props.employees.data;
                                 <strong class="text-sm">Edit</strong>
                             </button>
                         </div>
-                    </td>
+                    </TD>
                 </tr>
                 </tbody>
             </table>
