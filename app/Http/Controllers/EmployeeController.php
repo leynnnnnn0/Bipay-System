@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Api\StoreAddressRequest;
+use App\Http\Requests\Api\StoreContactRequest;
 use App\Http\Requests\Api\StoreEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
-use App\Models\User;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 
@@ -13,7 +14,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = EmployeeResource::collection(User::all());
+        $employees = EmployeeResource::collection(Employee::all());
         return inertia('Employee/Index', ['employees' => $employees]);
     }
 
@@ -25,12 +26,11 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $employeeData = $request->validate((new StoreEmployeeRequest())->rules());
+        $contactData = $request->validate((new StoreContactRequest())->rules());
         $addressData = $request->validate((new StoreAddressRequest())->rules());
-        $employee = User::create($employeeData);
-        $address = $employee->address()->create($addressData);
-        return inertia('Employee/Create', [
-            'employee' => $employee,
-            'address' => $address
-        ]);
+        $employee = Employee::create($employeeData);
+        $employee->contact()->create($contactData);
+        $employee->address()->create($addressData);
+        return to_route('employees.index');
     }
 }

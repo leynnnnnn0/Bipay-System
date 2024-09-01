@@ -18,7 +18,7 @@ const personalInformationForm = useRemember({
     middleName: '',
     gender: '',
     dateOfBirth: '',
-}, 'Employees/Create');
+}, 'Employee/Create');
 
 const addressInformationForm = useRemember({
     municipality: '',
@@ -46,6 +46,7 @@ const next = () => {
 const createEmployee = () => {
     const data = {
         ...personalInformationForm.value,
+        ...contactInformationForm.value,
         ...addressInformationForm.value
     };
     router.post(route('employees.store'),
@@ -64,7 +65,7 @@ const setFormValues = (form, values) => {
 
 const handlePersonalDetailsData = (data) => {
     setFormValues(personalInformationForm, data);
-    console.log(personalInformationForm)
+
     const result = Object.values(data).find((item, index) => index !== 2 &&  item === '');
     allowedToGoToNextStep(result);
 }
@@ -78,7 +79,6 @@ const handleAddressDetailsData = (data) => {
 
 const handleContactDetailsData = (data) => {
     setFormValues(contactInformationForm, data);
-    console.log(contactInformationForm);
 
     const result = Object.values(data).find(item => item === '');
     allowedToGoToNextStep(result);

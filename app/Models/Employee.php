@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Employees extends Model
+class Employee extends Model
 {
     use HasFactory;
 
@@ -20,12 +20,12 @@ class Employees extends Model
 
     public function address()
     {
-        return $this->hasOne(EmployeeAddresses::class);
+        return $this->hasOne(EmployeeAddress::class);
     }
 
     public function contact()
     {
-        return $this->hasOne(EmployeeContacts::class);
+        return $this->hasOne(EmployeeContact::class);
     }
 
 }
