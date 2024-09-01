@@ -29,9 +29,9 @@ class StoreEmployeeRequest extends FormRequest
             'middleName' => ['string'],
             'gender' => ['required', 'string', new Enum(Gender::class)],
             'dateOfBirth' => ['required', 'date', 'date_format:Y-m-d', 'before_or_equal:2006-12-31'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phoneNumber' => ['required', 'regex:/^09\d{9}$/'],
-            'password' => ['required'],
+//            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+//            'phoneNumber' => ['required', 'regex:/^09\d{9}$/'],
+//            'password' => ['required'],
         ];
     }
 
@@ -39,7 +39,6 @@ class StoreEmployeeRequest extends FormRequest
     {
         return [
             'date_of_birth.before_or_equal' => 'Employee must be above 18 years old',
-            'phone_number.regex' => 'Phone number must be in the format 09XXXXXXXXX.',
         ];
     }
 }

@@ -53,15 +53,5 @@ watch(props.formData, (newValue) => {
             <Input v-model="formData.dateOfBirth" type="date"/>
             <FormError v-if="formErrors.dateOfBirth">{{ formErrors.dateOfBirth[0]}}</FormError>
         </InputDiv>
-        <InputDiv>
-            <Label>Phone Number*</Label>
-            <Input v-model="formData.phoneNumber" placeholder="9*********"/>
-            <FormError v-if="formErrors.phoneNumber">{{ formErrors.phoneNumber[0]}}</FormError>
-        </InputDiv>
-        <InputDiv>
-            <Label>Email*</Label>
-            <Input v-model="formData.email" type="email" placeholder="johndoe@gmail.com"/>
-            <FormError v-if="formErrors.email">{{ formErrors.email[0]}}</FormError>
-        </InputDiv>
     </section>
 </template>

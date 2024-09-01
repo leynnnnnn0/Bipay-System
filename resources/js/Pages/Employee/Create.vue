@@ -6,6 +6,7 @@ import Progress from "@/Components/Progress.vue";
 import AddressInformation from "@/Pages/Employee/Partials/AddressInformation.vue";
 import {router, useRemember} from "@inertiajs/vue3";
 import ConfirmDetails from "@/Pages/Employee/Partials/ConfirmDetails.vue";
+import ContactInformation from "@/Pages/Employee/Partials/ContactInformation.vue";
 
 const stepCount = ref(1);
 const isAllowedToGoToNextStep = ref(false);
@@ -17,18 +18,20 @@ const personalInformationForm = useRemember({
     middleName: '',
     gender: '',
     dateOfBirth: '',
-    phoneNumber: '',
-    email: '',
-    password: 'password'
 }, 'Employees/Create');
 
 const addressInformationForm = useRemember({
     municipality: '',
     barangay: '',
     cityOrProvince: '',
-    zipCode: '',
+    postalCode: '',
     streetAddress: ''
 },'Address/Create')
+
+const contactInformationForm = useRemember({
+    phoneNumber: '',
+    email: ''
+},'Contact/Create')
 
 const back = () => {
     isAllowedToGoToNextStep.value = true;
@@ -60,7 +63,7 @@ const setFormValues = (form, values) => {
 
 const handlePersonalDetailsData = (data) => {
     setFormValues(personalInformationForm, data);
-
+    console.log(personalInformationForm)
     const result = Object.values(data).find((item, index) => index !== 2 &&  item === '');
     allowedToGoToNextStep(result);
 }
@@ -71,6 +74,14 @@ const handleAddressDetailsData = (data) => {
     const result = Object.values(data).find(item => item === '');
     allowedToGoToNextStep(result);
 }
+
+const handleContactDetailsData = (data) => {
+    setFormValues(addressInformationForm, data);
+
+    const result = Object.values(data).find(item => item === '');
+    allowedToGoToNextStep(result);
+}
+
 
 const allowedToGoToNextStep = (condition) => {
     isAllowedToGoToNextStep.value = condition === undefined;
@@ -119,8 +130,12 @@ watch(stepCount, () => {
                           :active="stepCount === 2"
                           :done="stepCount > 2"/>
                 <Progress step-count="3"
-                          step="Confirm Details"
+                          step="Contact Details"
                           :active="stepCount === 3"
+                          :done="stepCount > 3"/>
+                <Progress step-count="4"
+                          step="Confirm Details"
+                          :active="stepCount === 4"
                           :done="false"/>
             </section>
                 <PersonalInformation v-if="stepCount === 1"
@@ -131,10 +146,14 @@ watch(stepCount, () => {
                                      :formData="addressInformationForm"
                                      :formErrors="formErrors"
                                      @form-update="handleAddressDetailsData"/>
+                <ContactInformation  v-if="stepCount === 3"
+                                     :formData="contactInformationForm"
+                                     :formErrors="formErrors"
+                                     @form-update="handleContactDetailsData"/>
                 <ConfirmDetails
                     :personalInformation="personalInformationForm"
                     :addressInformation="addressInformationForm"
-                    v-if="stepCount === 3"/>
+                    v-if="stepCount === 4"/>
                 <div class="w-full flex justify-center col-span-2 gap-3">
                     <button v-if="stepCount > 1"
                             @click="back"
@@ -144,7 +163,7 @@ watch(stepCount, () => {
                             :disabled="!isAllowedToGoToNextStep"
                             :class="{'bg-opacity-75' :!isAllowedToGoToNextStep}"
                             class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Next</button>
-                    <button  v-if="stepCount === 3"
+                    <button  v-if="stepCount === 4"
                              @click="createEmployee"
                              class="hover:bg-opacity-75 transition-colors duration-500 bg-blue-500 text-white px-4 py-1 font-bold rounded-lg w-24">Create</button>
                 </div>

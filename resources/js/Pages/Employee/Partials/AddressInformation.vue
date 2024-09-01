@@ -41,8 +41,8 @@ watch(props.formData, (newValue) => {
         </InputDiv>
         <InputDiv>
             <Label>Zipcode*</Label>
-            <Input v-model="formData.zipCode" placeholder="4107"/>
-            <FormError v-if="formErrors.zipCode">{{ formErrors.zipCode[0]}}</FormError>
+            <Input v-model="formData.postalCode" placeholder="4107"/>
+            <FormError v-if="formErrors.postalCode">{{ formErrors.postalCode[0]}}</FormError>
         </InputDiv>
         <InputDiv>
             <Label>Address*</Label>
