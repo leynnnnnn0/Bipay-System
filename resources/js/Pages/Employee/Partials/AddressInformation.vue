@@ -40,7 +40,7 @@ watch(props.formData, (newValue) => {
             <FormError v-if="formErrors.cityOrProvince">{{ formErrors.cityOrProvince[0]}}</FormError>
         </InputDiv>
         <InputDiv>
-            <Label>Zipcode*</Label>
+            <Label>Postal Code*</Label>
             <Input v-model="formData.postalCode" placeholder="4107"/>
             <FormError v-if="formErrors.postalCode">{{ formErrors.postalCode[0]}}</FormError>
         </InputDiv>

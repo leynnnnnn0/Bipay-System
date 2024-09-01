@@ -40,7 +40,8 @@ const back = () => {
 const next = () => {
     formErrors.value = {};
     if(stepCount.value === 1) inputValidation('/api/employees/create', personalInformationForm.value);
-    if(stepCount.value === 2) inputValidation('/api/address/create', addressInformationForm.value);
+    if(stepCount.value === 2) inputValidation('/api/contact/create', contactInformationForm.value);
+    if(stepCount.value === 3) inputValidation('/api/address/create', addressInformationForm.value);
 }
 const createEmployee = () => {
     const data = {
@@ -76,7 +77,8 @@ const handleAddressDetailsData = (data) => {
 }
 
 const handleContactDetailsData = (data) => {
-    setFormValues(addressInformationForm, data);
+    setFormValues(contactInformationForm, data);
+    console.log(contactInformationForm);
 
     const result = Object.values(data).find(item => item === '');
     allowedToGoToNextStep(result);
@@ -126,11 +128,11 @@ watch(stepCount, () => {
                           :active="stepCount === 1"
                           :done="stepCount > 1"/>
                 <Progress step-count="2"
-                          step="Address Details"
+                          step="Contact Details"
                           :active="stepCount === 2"
                           :done="stepCount > 2"/>
                 <Progress step-count="3"
-                          step="Contact Details"
+                          step="Address Details"
                           :active="stepCount === 3"
                           :done="stepCount > 3"/>
                 <Progress step-count="4"
@@ -142,23 +144,24 @@ watch(stepCount, () => {
                                      :formData="personalInformationForm"
                                      :formErrors="formErrors"
                                      @form-update="handlePersonalDetailsData"/>
-                <AddressInformation  v-if="stepCount === 2"
-                                     :formData="addressInformationForm"
-                                     :formErrors="formErrors"
-                                     @form-update="handleAddressDetailsData"/>
-                <ContactInformation  v-if="stepCount === 3"
+                <ContactInformation  v-if="stepCount === 2"
                                      :formData="contactInformationForm"
                                      :formErrors="formErrors"
                                      @form-update="handleContactDetailsData"/>
+                <AddressInformation  v-if="stepCount === 3"
+                                     :formData="addressInformationForm"
+                                     :formErrors="formErrors"
+                                     @form-update="handleAddressDetailsData"/>
                 <ConfirmDetails
                     :personalInformation="personalInformationForm"
                     :addressInformation="addressInformationForm"
+                    :contactInformation="contactInformationForm"
                     v-if="stepCount === 4"/>
                 <div class="w-full flex justify-center col-span-2 gap-3">
                     <button v-if="stepCount > 1"
                             @click="back"
                             class="hover:bg-opacity-75 transition-colors duration-500 border border-blue-500 text-blue-500 px-4 py-1 font-bold rounded-lg w-24">Back</button>
-                    <button v-if="stepCount < 3"
+                    <button v-if="stepCount < 4"
                             @click="next"
                             :disabled="!isAllowedToGoToNextStep"
                             :class="{'bg-opacity-75' :!isAllowedToGoToNextStep}"

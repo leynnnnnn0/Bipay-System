@@ -26,12 +26,9 @@ class StoreEmployeeRequest extends FormRequest
         return [
             'firstName' => ['required', 'string', 'min:2'],
             'lastName' => ['required', 'string', 'min:2'],
-            'middleName' => ['string'],
+            'middleName' => ['nullable', 'string', 'min:2'],
             'gender' => ['required', 'string', new Enum(Gender::class)],
             'dateOfBirth' => ['required', 'date', 'date_format:Y-m-d', 'before_or_equal:2006-12-31'],
-//            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-//            'phoneNumber' => ['required', 'regex:/^09\d{9}$/'],
-//            'password' => ['required'],
         ];
     }
 

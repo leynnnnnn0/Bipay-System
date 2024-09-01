@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\EmployeeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::post('/address/create', [AddressController::class, 'create']);
     Route::post('/employees/create', [EmployeeController::class, 'create']);
+    Route::post('/contact/create', [ContactController::class, 'create']);
 });
 
 

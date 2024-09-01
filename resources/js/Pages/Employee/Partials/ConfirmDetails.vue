@@ -8,7 +8,11 @@ defineProps({
     addressInformation: {
         type: Object,
         required: true
-    }
+    },
+    contactInformation: {
+        type: Object,
+        required: true
+    },
 })
 </script>
 
@@ -23,8 +27,11 @@ defineProps({
                     <strong class="text-gray-900">Last Name: <span v-text="personalInformation.lastName"></span></strong>
                     <strong class="text-gray-900">Gender: <span v-text="personalInformation.gender"></span></strong>
                     <strong class="text-gray-900">Date of Birth: <span v-text="personalInformation.dateOfBirth"></span></strong>
-                    <strong class="text-gray-900">Phone Number: <span v-text="personalInformation.phoneNumber"></span></strong>
-                    <strong class="text-gray-900">Email: <span v-text="personalInformation.email"></span></strong>
+                </section>
+                <h1 class="text-black text-xl font-bold">Contact Details</h1>
+                <section class="flex flex-col gap-1">
+                    <strong class="text-gray-900">Phone Number: <span v-text="contactInformation.phoneNumber"></span></strong>
+                    <strong class="text-gray-900">Email: <span v-text="contactInformation.email"></span></strong>
                 </section>
             </section>
             <section class="w-full space-y-3">
@@ -33,8 +40,8 @@ defineProps({
                     <strong class="text-gray-900">Municipality: <span v-text="addressInformation.municipality"></span></strong>
                     <strong class="text-gray-900">Barangay: <span v-text="addressInformation.barangay"></span></strong>
                     <strong class="text-gray-900">City/Province: <span v-text="addressInformation.provinceOrState"></span></strong>
-                    <strong class="text-gray-900">Zipcode: <span v-text="addressInformation.zipCode"></span></strong>
-                    <strong class="text-gray-900">Address: <span v-text="addressInformation.address"></span></strong>
+                    <strong class="text-gray-900">Postal Code: <span v-text="addressInformation.postalCode"></span></strong>
+                    <strong class="text-gray-900">Address: <span v-text="addressInformation.streetAddress"></span></strong>
                 </section>
             </section>
         </div>
