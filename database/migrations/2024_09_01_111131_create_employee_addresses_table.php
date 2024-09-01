@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Models\Employees;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,13 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('employee_addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignIdFor(Employees::class)->constrained()->cascadeOnDelete();
             $table->string('municipality');
             $table->string('barangay');
             $table->string('cityOrProvince');
-            $table->string('zipcode');
+            $table->string('postalCode');
             $table->string('streetAddress');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('employee_addresses');
     }
 };

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Address extends Model
+class EmployeeAddresses extends Model
 {
     use HasFactory;
 
@@ -14,11 +14,12 @@ class Address extends Model
         'barangay',
         'cityOrProvince',
         'streetAddress',
-        'zipCode'
+        'postalCode'
     ];
 
-    public function user()
+    public function employee()
     {
-        return $this->belongsTo(User::class);
+        $this->belongsTo(Employees::class);
     }
+
 }

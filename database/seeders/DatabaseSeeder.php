@@ -16,11 +16,7 @@ class DatabaseSeeder extends Seeder
     {
 
         User::factory()->create([
-            'firstName' => 'nathaniel',
-            'lastName' => 'alvarez',
-            'gender' => 'male',
-            'dateOfBirth' => '2004-08-08',
-            'phoneNumber' => '9266887267',
+            'name' => 'nathaniel',
             'email' => 'nathaniel@gmail.com',
             'password' => Hash::make('nathaniel'),
         ]);
